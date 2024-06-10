@@ -1,15 +1,21 @@
 WITH user_committees AS (
     SELECT
-        user_id,
-        first_name,
-        last_name,
-        email,
-        home_phone,
-        cell_phone,
-        committee_id,
-        date_of_last_login
+        uc.user_id,
+        uc.first_name,
+        uc.last_name,
+        uc.email,
+        uc.home_phone,
+        uc.cell_phone,
+        uc.committee_id,
+        c.committee_name,
+        c.committee_type_name,
+        uc.date_of_last_login
     FROM
-        demswasp.vansync.users -- Replace state code
+        demswasp.vansync.users AS uc -- Replace with state code
+    JOIN
+        demswasp.vansync.committees AS c -- Replace with state code
+    ON
+        uc.committee_id = c.committee_id
 ),
 multi_account_users AS (
     SELECT
@@ -35,6 +41,8 @@ SELECT
     uc.home_phone,
     uc.cell_phone,
     uc.committee_id,
+    uc.committee_name,
+    uc.committee_type_name,
     uc.date_of_last_login
 FROM
     user_committees uc
@@ -46,4 +54,4 @@ ON
      uc.home_phone = mau.home_phone OR
      uc.cell_phone = mau.cell_phone)
 ORDER BY
-    uc.email, uc.home_phone, uc.cell_phone, uc.user_id, uc.committee_id;
+    uc.user_id, uc.email, uc.home_phone, uc.cell_phone, uc.committee_id
