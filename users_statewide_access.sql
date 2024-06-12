@@ -19,7 +19,8 @@ WITH user_committees AS (
 statewide_access AS (
     SELECT
         user_id,
-        is_statewide
+        is_statewide,
+        is_active
     FROM
         demswasp.vansync.users_databases
 )
@@ -42,6 +43,7 @@ ON
     uc.user_id = sa.user_id
 WHERE
     sa.is_statewide = TRUE
+AND sa.is_active = TRUE
 GROUP BY 1,2,3,4,5,6,7,8,9,10
 ORDER BY
     uc.user_id, uc.committee_id
